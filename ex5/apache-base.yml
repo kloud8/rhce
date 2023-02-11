@@ -1,0 +1,20 @@
+---
+- hosts: test
+  become: true
+  tasks:
+   - name: install
+     yum: name=httpd state=present
+   - name: service
+     service: name=httpd state=started enabled=true
+   - name: index
+     template: src=index.html.j2 dest=/var/www/html/index.html
+     notify: restart httpd
+   - name: firewall
+     service: name=firewalld state=started enabled=true
+   - name: port
+     firewalld: service=http state=enabled immediate=true permanent=true
+
+
+  handlers:
+   - name: restart httpd
+     service: name=httpd state=restarted enabled=true

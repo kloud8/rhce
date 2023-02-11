@@ -1,0 +1,6 @@
+---
+- hosts: db
+  become: true
+  tasks:
+    - name: temp
+      template: src=templates/report.j2 dest=/root/report.txt

@@ -1,0 +1,19 @@
+---
+- hosts: dev
+  become: true
+  vars:
+    hw_info:
+     - hw_name: inventory_name
+       hw_content: "{{inventory_hostname | default('None') }}"
+     - hw_name: total_mem
+       hw_content: "{{ansible_memtotal_mb }}"
+     - hw_name: bios_version
+       hw_content: "{{ansible_bios_version}}"
+     - hw_name: sda_size
+       hw_content: "{{ansible_devices.sda.size | default('None') }}"
+     - hw_name: sdb_size
+       hw_content: "{{ansible_devices.sdb.size | default('None') }}"
+  tasks:
+    - name: change lines
+      lineinfile: path=/root/hwreport.txt regexp='^{{item.hw_name}}' line="{{item.hw_name}} = {{item.hw_content}}"
+      loop: "{{hw_info}}"

@@ -1,0 +1,5 @@
+inventory_name = hostname
+total_mem = totalmem_mb
+bios_version = bios_version
+sda_size = sda.size
+sdb_size = sdb.size

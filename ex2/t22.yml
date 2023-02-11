@@ -1,0 +1,16 @@
+---
+- hosts: all
+  become: true
+  tasks: 
+    - name: fireall
+      firewalld: service="{{item}}" immediate=true permanent=true state=enabled
+      when: inventory_hostname in groups['webserver']
+      loop:
+        - http
+        - ntp
+    - name: lb
+      firewalld: port="{{item}}" state=enabled permanent=true immediate=true
+      loop:
+        - 400-404/tcp
+        - 3306/tcp
+      when: inventory_hostname in groups['lb']

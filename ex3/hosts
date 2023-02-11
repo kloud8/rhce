@@ -1,0 +1,12 @@
+[dev]
+rh12
+[lb]
+cent2
+[test]
+cent1
+
+[pro]
+rh13
+
+[webservers:children]
+pro

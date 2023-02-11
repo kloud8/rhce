@@ -1,0 +1,14 @@
+[prod]
+rh12
+
+[dev]
+cent1
+
+[test]
+cent2
+
+[balancers]
+rh13
+
+[webservers:children]
+prod

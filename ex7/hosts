@@ -1,0 +1,17 @@
+[pro]
+rh12
+
+[lbs]
+rh13
+
+[dev]
+cent1
+
+[test]
+cent2
+
+[webserver:children]
+pro
+
+
+

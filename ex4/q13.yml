@@ -1,0 +1,7 @@
+---
+- hosts: all 
+  become: true 
+  tasks:
+   - name: temp 
+     template: src=templates/s.j2 dest=/root/servers.txt
+     when: inventory_hostname in groups['test']

@@ -1,0 +1,19 @@
+---
+- hosts: all
+  become: true
+  vars_files:
+   - locker.yml
+   - list.yml
+
+  tasks:
+    - name: grp1
+      group: name=opmsgr state=present 
+      when: inventory_hostname in groups['pro']
+    - name: grp2
+      group: name=devops state=present
+      when: inventory_hostname in groups['dev'] or inventory_hostname in groups['test']
+    - name: users
+      user: name="{{item.name}}" group=devops state=present password="{{pw_developer | password_hash('sha512') }}"
+      loop: "{{users}}"
+      when: (inventory_hostname in groups['dev'] or inventory_hostname in groups['test']) and item.job == 'developers'
+   

@@ -1,0 +1,19 @@
+---
+- hosts: dev,test,prod
+  become: true
+  tasks:
+   - name: install pkgs
+     yum: name="{{item}}" state=present 
+     loop:
+       - php
+       - mariadb
+   - block:
+      - name: install packs2
+        yum: name="@RPM Development Tools" state=latest update_cache=yes
+      - name: update
+        yum: name="*" state=latest
+     when: inventory_hostname in groups['dev']
+
+
+
+     # ansible dev -m command -a 'yum grouplist Dev*' -b

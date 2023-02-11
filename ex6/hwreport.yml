@@ -1,0 +1,42 @@
+---
+- hosts: dev
+  become: true
+  vars:
+    hw_info:
+     - hw_name: inventory_name
+       hw_content: "{{inventory_hostname | default('None') }}"
+     - hw_name: total_mem
+       hw_content: "{{ansible_memtotal_mb }}"
+     - hw_name: bios_version
+       hw_content: "{{ansible_bios_version}}"
+     - hw_name: sda_size
+       hw_content: "{{ansible_devices.sda.size | default('None') }}"
+     - hw_name: sdb_size
+       hw_content: "{{ansible_devices.sdb.size | default('None') }}"
+  tasks:
+    - name: change lines
+      lineinfile: path=/root/hwreport.txt regexp='^{{item.hw_name}}' line="{{item.hw_name}} = {{item.hw_content}}"
+      loop: "{{hw_info}}"
+
+
+
+# ---
+# - hosts: dev
+#   become: true
+#   vars:
+#     hw_all:
+#       - hw_name: inventory_name 
+#         hw_count: "{{inventory_hostname | default('None') }}"
+#       - hw_name:  total_mem
+#         hw_count: "{{ ansible_memtotal_mb | default('None') }}"
+#       - hw_name: bios_version
+#         hw_count: "{{ ansible_bios_version | default( 'None') }}"
+#       - hw_name: vda_size
+#         hw_count: "{{ ansible_devices.vda.size | default('None') }}"
+#       - hw_name: vdb_size
+#         hw_count: "{{ ansible_devices.vdb.size | default('None', true) }}"
+#   tasks:
+#    - name: replace
+#      lineinfile: path=/root/report.txt regexp="{{ item.hw_name }}" line="{{ item.hw_name }} = {{ item.hw_count }}"
+#      loop: "{{ hw_all }}"
+     

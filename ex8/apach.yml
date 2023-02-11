@@ -1,0 +1,23 @@
+---
+- hosts: test
+  tasks:
+    - name: install apache
+      yum: name="{{item}}" state=present
+      loop:
+       - httpd
+       - firewalld
+    - name: svc
+      service: name="{{item}}" state=started enabled=true
+      loop: 
+        - httpd
+        - firewalld
+    - name: temp
+      template: src=index.html.j2 dest=/var/www/html/index.html
+      notify: restart httpd
+    - name: port
+      firewalld: service=http state=enabled permanent=true immediate=true
+
+
+  handlers:
+    - name: restart httpd
+      service: name=httpd state=restarted enabled=true

@@ -1,0 +1,15 @@
+---
+- hosts: all
+  become: true
+  tasks: 
+   - name: install pack1
+     yum: name="{{item}}" state=present
+     loop:
+       - mariadb
+       - php
+   - block:
+      - name: install packs2
+        yum: name="@RPM Development Tools" state=present update_cache=yes
+      - name: update
+        yum: name="*" state=latest
+     when: inventory_hostname in groups['dev']

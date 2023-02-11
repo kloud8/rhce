@@ -1,0 +1,9 @@
+---
+- hosts: test
+  become: true
+  vars_files:
+   - servers.yml
+  tasks:
+    - name: users
+      user: name="{{item.name}}" password="{{item.password | password_hash('sha512')}}" uid="{{item.uid}}" 
+      loop: "{{users}}"

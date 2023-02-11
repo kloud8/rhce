@@ -1,0 +1,10 @@
+---
+- hosts: test
+  become: true
+  tasks:
+   - name: lv
+     lvol: vg=rhce lv=ex294 size="100%FREE"
+   - name: file 
+     filesystem: fstype=ext4 dev=/dev/mapper/rhce-ex294
+   - name: mnt 
+     mount: path=/ex294 src=/dev/mapper/rhce-ex294 fstype=ext4 state=mounted

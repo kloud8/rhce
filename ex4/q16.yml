@@ -1,0 +1,15 @@
+---
+- hosts: test 
+  become: true 
+  tasks:
+   - name: info 
+     blockinfile: 
+       path: /root/info.txt 
+       create: true
+       block: |
+         Mem_total: "{{ansible_memtotal_mb}}" 
+         Mem_free: "{{ansible_memfree_mb}}"
+         Host: "{{ansible_hostname}}"
+         IPV$: "{{ansible_default_ipv4.address}}"
+         FQDN: "{{ansible_fqdn}}"
+    

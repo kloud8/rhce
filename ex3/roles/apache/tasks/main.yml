@@ -1,0 +1,11 @@
+---
+ - name: install httpd firewalld
+   yum: name="{{item}}" state=present
+   loop:
+     - httpd
+     - firewalld 
+ - name: start svc
+   firewalld: service=http state=enabled immediate=true permanent=true 
+ - name: start httpd 
+   service: name=httpd state=started enabled=true
+ - template: src=index.html.j2 dest=/var/www/html/index.html

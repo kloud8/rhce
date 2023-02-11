@@ -1,0 +1,9 @@
+{% for host in groups['db'] %} 
+  {% if ansible_facts['devices']['sda'] %}
+    Host: {{host}}
+    {% for part in hostvars[host]['ansible_facts']['devices']['sda']['partitions'] %}
+       Partition {{ part }}
+       size: {{ hostvars[host][['ansible_facts']['devices']['sda']['partitions'][part]['size'] }}
+    {% endfor %}
+  {% endif %}
+{% endfor %}

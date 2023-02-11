@@ -1,0 +1,26 @@
+---
+- hosts: db
+  become: true
+  remote_user: root
+  tasks:
+   - name: info
+     parted:
+       device: /dev/sdb
+       unit: MiB
+     register: sdb_info
+   - debug: msg={{sdb_info}}
+   - name: part
+     parted: 
+        device: "/dev/sdb"
+        number: "3"
+        part_type: primary
+        flags: [ lvm ]
+        state: present
+        part_start: "{{sdb_info.partitions[1].end +1}}MiB"
+        part_end: "{{sdb_info.partitions[1].end + 2048}}MiB"
+   - name: volume g
+     lvg: 
+       vg: vgroup
+       pvs: /dev/sdb1     
+
+        # this work

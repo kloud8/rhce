@@ -1,0 +1,15 @@
+---
+- hosts: dev,test
+  become: true
+  tasks:
+   - name: install 
+     yum: name="{{item}}" state=present
+     loop:
+      - php
+      - mariadb
+   - block:
+      - name: install pkg2
+        yum: name="@Development tools" state=present 
+      - name: update
+        yum: name="*" state=latest 
+     when: inventory_hostname in groups['dev']

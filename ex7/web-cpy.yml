@@ -1,0 +1,31 @@
+---
+- hosts: dev
+  become: true 
+  tasks:
+    - name: install
+      yum: name="{{item}}" state=present 
+      loop:
+        - httpd
+        - firewalld 
+    - name: svc 
+      service: name=httpd state=started enabled=true
+    - name: firewall 
+      firewalld:  service=http state=enabled immediate=true permanent=true 
+    - name: group
+      group: name=webdev state=present
+    - name: mkdir 
+      file: path=/webdev state=directory group=webdev mode='2775'
+    - name: link
+      file: src=/webdev dest=/var/www/html/webdev state=link force=true
+    - name: content 
+      copy: content="Development" dest=/webdev/index.html
+    - name: setype 
+      sefcontext: target='/webdev(/.*)?' setype="httpd_sys_content_t" state=present 
+    - name: apply 
+      command: restorecon -irv /webdev
+    
+    - name: restart
+      service: name=httpd state=restarted enabled=true
+   
+
+

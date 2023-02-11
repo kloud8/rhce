@@ -1,0 +1,11 @@
+---
+- hosts: test
+  become: true
+  tasks:
+   - name: find
+     stat: path="/var/www/html/blog/index.html"
+     register: stat_out
+   - debug: msg="file exists"
+     when: stat_out.stat.exists == true 
+   - debug: msg="no file"
+     when: stat_out.stat.exists == false

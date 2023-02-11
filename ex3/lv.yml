@@ -1,0 +1,18 @@
+---
+- hosts: test
+  become: true
+  tasks:
+    - block:
+       - name: lvm
+         lvol: vg=research lv=data size=3G
+      rescue:
+        - debug: msg="could not create 3G!"
+        - name: create lv 
+          lvol: vg=research lv=data size=1G
+      always:
+        - name: lv format 
+          filesystem: dev="/dev/research/data" fstype=ext4
+      when: "'research' in ansible_lvm.vgs"
+    - name: message 
+      debug: msg="no volume group!!"
+      when: "'research' not in ansible_lvm.vgs"

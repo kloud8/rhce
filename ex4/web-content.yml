@@ -1,0 +1,19 @@
+---
+- hosts: test
+  become: true
+  tasks:
+   - name: group 
+     group: name=devops state=present
+   - name: dir
+     file: path=/webdev group=devops mode="2775" state=directory 
+   - name: link 
+     file: src=/webdev dest=/var/www/html/webdev state=link 
+   - name: index 
+     copy: content="devops!!" dest=/webdev/index.html
+   - name: selinux 
+     sefcontext: target='/webdev(/.*)?' setype="httpd_sys_content_t" state=present
+   - name: restore 
+     shell: restorecon -vR /webdev
+
+
+# Not working!

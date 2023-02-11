@@ -1,0 +1,20 @@
+---
+- hosts: all
+  become: true
+  tasks:
+   - name: test
+     copy: content="Test!\'n" dest=/etc/new_banner
+     when: inventory_hostname in groups['test']
+  #  - name: lb
+  #    copy: content="LB\n" dest=/etc/new_banner
+    #  when: inventory_hostname in groups['lb']
+   - name: config 
+     lineinfile: path=/etc/ssh/sshd_config line="Banner /etc/new_banner"
+     notify: restart sshd
+
+
+  handlers:
+   - name: restart sshd
+     service: name=sshd state=restarted enabled=true
+
+  

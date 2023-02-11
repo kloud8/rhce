@@ -1,0 +1,19 @@
+---
+- hosts: test
+  become: true 
+  vars_files:
+    - ./locker.yml
+    - ./users_list.yml
+  tasks:
+    - name: group 
+      group: name=devops state=present 
+      when: inventory_hostname in groups['test']
+    # - name: group2
+    #   group: name=test state=present 
+    #   when: inventory_hostname in groups['test']
+    - name: create user on test
+      user: name="{{item.name}}" state=present  groups=devops password="{{pw_developer|password_hash('sha512')}}"
+      loop: "{{users}}"
+      # when: item.job == 'devops'
+      #  - item.job == 'developer'
+      #  - inventory_hostname in groups['dev']

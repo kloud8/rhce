@@ -1,0 +1,21 @@
+---
+- hosts: test
+  become: true
+  tasks:
+   - name: install packs
+     yum: name="{{item}}" state=present
+     loop:
+       - httpd
+       - firewalld
+   - name: svc
+     service: name=httpd state=started enabled=true
+   - name: firewall 
+     firewalld: service=http immediate=true permanent=true state=enabled
+   - name: temp 
+     template: src=templates/index.j2 dest=/var/www/html/index.html owner=apache group=apache mode="0644"
+     notify: restart httpd
+
+
+  handlers:
+   - name: restart httpd
+     service: name=httpd state=restarted enabled=true

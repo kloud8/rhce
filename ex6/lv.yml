@@ -1,0 +1,29 @@
+---
+- hosts: dev
+  become: true
+  tasks: 
+   - name: check vgdisplay
+     shell: vgdisplay research
+     register: vg_check
+     ignore_errors: true
+   - debug: var=vg_check
+   - name: error message 
+     debug: msg="vg research do not exist!!"
+     when: vg_check is failed
+  
+    #  when: '"not found" in vg_check.stderr'
+    #  when: vg_check.rc != 0
+  #  - name: create lv
+  #    block:
+  #      - name: lvs
+  #        lvol: vg=research lv=lvx size=2200M
+  #    rescue:
+  #       - debug: msg="too big lvm!!"
+  #       - name: vg=research lv=lvx size=800M
+  #    always:
+  #       - name: filesystem
+  #         filesystem: dev=/dev/research/lvs fstype=ext4
+  #       - name: directory
+  #         file: path=/data state=directory mode="0775"
+  #       - name: mount
+  #         mount: path=/data fstype=ext4 state=mounted

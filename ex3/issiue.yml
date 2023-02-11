@@ -1,0 +1,10 @@
+---
+- hosts: all
+  become: true 
+  tasks:
+    - name: content 
+      copy: content="dev team" dest=/etc/issue 
+      when: inventory_hostname in groups['dev'] 
+    - name: content2
+      copy: content="test team" dest=/etc/issue
+      when: inventory_hostname in groups['test']

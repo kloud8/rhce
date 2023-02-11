@@ -1,0 +1,8 @@
+---
+
+- src: "https://github.com/nexcess/ansible-haproxy.git"
+  name: balancer
+
+- src: "https://github.com/nexcess/ansible-role-php.git"
+  name: php
+  

@@ -1,0 +1,8 @@
+---
+- hosts: test 
+  become: true 
+  tasks:
+    - name: line 
+      lineinfile: path=/root/line.txt regexp='^Welcome.*ble$' line="Ola!" backrefs=true
+    - name: replace a word
+      replace: path=/root/line.txt regexp='o[4,5]' replace='olalalala' backup=true

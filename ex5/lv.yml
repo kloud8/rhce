@@ -1,0 +1,23 @@
+---
+- hosts: dev
+  become: true
+  tasks:
+    - name: create lv
+      block:
+        - name:  lv1
+          lvol: vg=research lv=lvx size=2500M
+      rescue:
+        - name: error 
+          debug: msg="1500N too big!!"
+        - name: "create vol2"
+          lvol: vg=research lv=lvx size=800M
+      always:
+        - name: format
+          filesystem: dev=/dev/research/lvx fstype=ext4
+        - name: mountpoint
+          file: path="/data" state=directory mode="0775" 
+        - name: mount
+          mount: src="/dev/research/lvx" path=/data fstype=ext4 state=mounted
+          register: mountpoint 
+          ignore_errors: true
+        - debug: msg="mount {{mountpoint}}"

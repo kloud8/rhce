@@ -1,0 +1,16 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - block:
+        - name: webservers 
+          yum: name=httpd state=present
+        - name: svc
+          service: name=httpd state=started enabled=true
+      when: inventory_hostname in groups['webserver']
+    - block:
+        - name: mariadb
+          yum: name=mariadb-server state=present 
+        - name: svc
+          service: name=maridb state=started enabled=true
+      when: inventory_hostname in groups['db'] 

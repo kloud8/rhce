@@ -1,0 +1,10 @@
+---
+- hosts: db
+  become: true 
+  tasks:
+    - name: cretet mt point 
+      file: path=/volume/data state=directory
+    - name: file system
+      filesystem: dev=/dev/vgroup/lvm fstype=xfs
+    - name: mount
+      mount: path=/volume/data src=/dev/vgroup/lvm fstype=xfs state=mounted

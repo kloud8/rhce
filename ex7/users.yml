@@ -1,0 +1,14 @@
+---
+- hosts: all
+  become: true
+  vars_files:
+    - locker.yml
+    - list.yml
+  tasks:
+    - name: group1
+      group: name=devops state=present
+      when: ansible_hostname in groups['dev'] or ansible_hostname in groups['test']
+    - name: users
+      user: name="{{item.name}}" state=present password="{{pw_developer | password_hash('sha512')}}" groups=devops append=true
+      loop: "{{users}}"
+      when: (ansible_hostname in groups['dev'] or ansible_hostname in groups['test']) and item.job == 'developers"

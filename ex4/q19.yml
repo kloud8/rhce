@@ -1,0 +1,12 @@
+---
+- hosts: test
+  become: true
+  tasks:
+   - name: vg 
+     lvg: vg=rhce pvs=/dev/sdb1
+   - name: lv
+     lvol: lv=exam vg=rhce size=500m 
+   - name: type 
+     filesystem: fstype=xfs dev=/dev/mapper/rhce-exam
+   - name: mt 
+     mount: path=/exam src=/dev/mapper/rhce-exam fstype=xfs state=mounted

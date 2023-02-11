@@ -1,0 +1,11 @@
+---
+- hosts: test
+  become: true
+  tasks:
+   - name: rep
+     lineinfile: path=/var/www/html/index.html regexp='^Welcome to server' line="Welcome {{ansible_fqdn}}" state=present
+     notify: restart httpd
+
+  handlers:
+   - name: restart httpd
+     service: name=httpd state=restarted enabled=true

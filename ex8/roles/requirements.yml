@@ -1,0 +1,5 @@
+- src: http://ukdisk.asuscomm.com:8888/pdf_wav/ansible-role-haproxy-master.tar.gz
+  name: balancer
+
+- src: http://ukdisk.asuscomm.com:8888/pdf_wav/ansible-role-php-master.tar.gz
+  name: phpinfo

@@ -1,0 +1,7 @@
+{% for host in groups.all %}
+{{hostvars[host]['ansible_facts']['default_ipv4']['address']}} {{hostvars}}
+{% endfor %}
+---
+- hosts: all
+  tasks:
+    - debug: var=hostvars[inventory_hostname]['ansible_default_ipv4']['address']

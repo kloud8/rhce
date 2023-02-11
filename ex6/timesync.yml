@@ -1,0 +1,14 @@
+---
+- hosts: dev
+  become: true
+  vars:
+    timesync_ntp_servers:
+    - hostname: 0.rhel.pool.ntp.org
+    - hostname: 1.rhel.pool.ntp.org
+  roles:
+   - rhel-system-roles.timesync
+
+
+
+#   chronyc -N authdata  --not working
+#   ansible dev -m command -a 'chronyc sources'

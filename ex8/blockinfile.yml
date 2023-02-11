@@ -1,0 +1,10 @@
+---
+- hosts: dev
+  tasks:
+    - name: blockinfile
+      blockinfile:
+         path: /tmp/hwreport.txt 
+         block: |
+           inventory_hostname:  "{{ansible_hostname}}"
+           total_mem: "{{ansible_memtotal_mb}}"
+        

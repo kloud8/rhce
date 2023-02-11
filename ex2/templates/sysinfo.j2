@@ -1,0 +1,6 @@
+{% if inventory_hostname in groups['lb'] %}
+    hostname:    {{inventory_hostname}}
+   vgsize:       {{ansible_facts['lvm']['lvs']['lvm']['size_g']}}
+   os family     {{ansible_os_family}}
+
+{% endif %}

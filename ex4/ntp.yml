@@ -1,0 +1,11 @@
+---
+- hosts: test 
+  become: true
+  vars:
+    timesync_ntp_servers:
+      - hostname:  2.rhel.pool.ntp.org
+    timesync_chrony_custom_settings:
+      - "logdir /var/log/chrony"
+  roles:
+    - rhel-system-roles.timesync
+

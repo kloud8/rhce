@@ -1,0 +1,25 @@
+---
+- hosts: webserver
+  become: true
+  tasks:
+    - name: dir
+      file: path=/var/web/html state=directory
+    - name: sel 
+      sefcontext: target="/var/web/html(/.*)?" setype="httpd_sys_content_t" state=present
+    - name: apply
+      command: restorecon -irv /var/web/html
+    - name: doc
+      lineinfile: path=/etc/httpd/conf/httpd.conf regexp="DocumentRoot" backup=true line='DocumentRoot "/var/web/html"'
+      notify: restart httpd
+    - name: permission 
+      lineinfile: path=/etc/httpd/conf/httpd.conf regexp='<Directory /var/www/html>' line='<Directory /var/web/html>'
+      notify: restart httpd
+    - name: index
+      template: src=templates/index.j2 dest=/var/web/html/index.html
+    - name: firewll
+      firewalld: service=http permanent=true immediate=true state=enabled
+
+
+  handlers:
+    - name: restart httpd
+      service: name=httpd state=restarted

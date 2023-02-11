@@ -1,0 +1,29 @@
+---
+- hosts: dev
+  tasks:
+    - name: check vg
+      shell: vgdisplay research
+      register: check_vg
+      ignore_errors: true
+    - name: debug
+      debug: msg="vg does not exists!"
+      when: check_vg.rc != 0
+    - name: block
+      block:
+        - name: create vg
+          lvg: vg=research pvs=/dev/sdb 
+        - name: crete volume
+          lvol: lv=demo vg=research size=2500M
+      rescue:
+        - name: res1
+          debug: msg="no volume exists"
+        - name: new vg
+          lvol: vg=research lv=demo size=1200M
+      always:
+        - name: file
+          filesystem: dev=/dev/research/demo fstype=ext4
+        - name: dir
+          file: path=/data state=directory mode="0755" 
+        - name: mount
+          mount: src=/dev/research/demo path=/demo state=mounted fstype=ext4
+      when: ansible_hostname in groups['dev']

@@ -1,0 +1,49 @@
+---
+- hosts: dev
+  become: true
+  vars:
+    hw_all:
+      - hw_name: inventory_name 
+        hw_count: "{{inventory_hostname | default('None') }}"
+      - hw_name:  total_mem
+        hw_count: "{{ ansible_memtotal_mb | default('None') }}"
+      - hw_name: bios_version
+        hw_count: "{{ ansible_bios_version | default( 'None') }}"
+      - hw_name: vda_size
+        hw_count: "{{ ansible_devices.vda.size | default('None') }}"
+      - hw_name: vdb_size
+        hw_count: "{{ ansible_devices.vdb.size | default('None', true) }}"
+  tasks:
+   - name: replace
+     lineinfile: path=/root/report.txt regexp="{{ item.hw_name }}" line="{{ item.hw_name }} {{ item.hw_count }}"
+     loop: "{{ hw_all }}"
+     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    #  lineinfile: path=/root/report.txt regexp='^inventory_name' line="inventory_name = {{inventory_hostname | default('None') }}"
+
+# inventory_name = cent1
+# total_mem = totalmem_mb
+# bios_version = bios_version
+# vda_size = vda.size
+# vdb_size = vdb.size

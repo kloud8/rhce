@@ -1,0 +1,6 @@
+---
+- hosts: db
+  become: true
+  tasks:
+    - name: file 
+      file: path=/home/ansible/file1.txt mode="2750" owner=ansible group=ansible state=touch

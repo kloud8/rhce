@@ -1,0 +1,7 @@
+---
+- hosts: all
+  become: true
+  tasks:
+   - name: issue1
+     copy: content="welcome to developmnet" dest=/etc/issue 
+     when: inventory_hostname in groups['dev']

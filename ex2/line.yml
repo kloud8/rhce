@@ -1,0 +1,13 @@
+---
+- hosts: db
+  become: true
+  tasks:
+    # lineinfile: path=/etc/httpd/conf/httpd.conf regexp='^<Directory*' line='<Directory "/var/www/html">' insertafter="<Directory " - name: replace
+    #   lineinfile: path=/etc/httpd/conf/httpd.conf regexp="^DocumentRoot" line='DocumentRoot "/var/www/html"' insertafter="DocumentRoot" backup=true
+    #   register: line_out
+    # - debug: var=line_out
+    # - name: rep
+    
+    - name: replace 
+      replace: path=/root/httpd.conf regexp='^DocumentRoot.*' replace='DocumentRoot /var/www/html'
+    - replace: path=/root/httpd.conf regexp='<Directory.*>' replace='<Directory /var/www/html>'

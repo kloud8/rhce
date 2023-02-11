@@ -1,0 +1,17 @@
+---
+- hosts: production, dev, test
+  become: true
+  tasks:
+   - name: install
+     yum: name="{{item}}" state=latest
+     loop:
+      - php
+      - mariadb
+   - block:
+      - name: install @dev
+        yum: name="@RPM Development Tools" state=present
+      - name: updates
+        yum: name='*' state=latest
+     when: '"dev" in group_names'
+     
+

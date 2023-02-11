@@ -1,0 +1,26 @@
+---
+- hosts: dev
+  become: true
+  tasks:
+    - name: check
+      shell: ls /dev/sdb
+      register: check_sdb
+      ignore_errors: true
+    - name: error msg
+      debug: msg="sdb not!"
+      when: check_sdb is failed
+    - name: part
+      block:
+        - name: parted job
+          parted: device=/dev/sdb number=1 part_end=2500MiB state=present
+      rescue:
+        - name: debug
+          debug: msg="size too big"
+        - name: parted2
+          parted: number=1 device=/dev/sdb part_end=800MiB state=present
+    - name: filesystem
+      filesystem: dev=/dev/sdb1 fstype=ext4 
+    - name: mount
+      file: path=/newpart state=directory mode="0755"
+    - name: mount
+      mount: src=/dev/sdb1 path=/newpart fstype=ext4 state=mounted

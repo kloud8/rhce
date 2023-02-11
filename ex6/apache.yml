@@ -1,0 +1,23 @@
+---
+- hosts: test
+  become: true
+  tasks:
+   - name: install httpd firewalld
+     yum: name="{{item}}" state=present
+     loop:
+      - httpd
+      - firewalld
+   - name: service
+     service: name="{{item}}" state=started enabled=true
+     loop:
+       - httpd
+       - firewalld
+   - name: template
+     template: src=templates/index.j2 dest=/var/www/html/index.html
+     notify: restart httpd
+   - name: port
+     firewalld: service=http state=enabled permanent=true immediate=true 
+
+  handlers:
+    - name: restart httpd 
+      service: name=httpd state=restarted enabled=true

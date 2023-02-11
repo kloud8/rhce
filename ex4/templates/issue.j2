@@ -1,0 +1,9 @@
+
+{% for host in groups['all'] %}
+{% if hostvars[host]['ansible_facts']['hostname'] in groups['dev'] %}
+DEV!@
+{% endif %}
+{% endfor %}
+
+
+#   Not working!!

@@ -1,0 +1,11 @@
+---
+- hosts: db
+  become: true
+  tasks:
+    - name: logical volume 
+      lvol: lv=lvm vg=vgroup size=800m state=present 
+      register: vol_out
+      when:
+       - "'vgroup' in ansible_facts['lvm']['vgs']"
+       - ansible_facts['lvm']['vgs']['vgroup']['size_g'] > '0.80'
+    # - debug: msg="******* {{vol_out.size}}"

@@ -1,0 +1,14 @@
+[pro]
+rh12
+
+[loadbalancer]
+rh13
+
+[dev]
+cent1
+
+[test]
+cent2
+
+[webservers:children]
+pro

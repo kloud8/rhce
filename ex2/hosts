@@ -1,0 +1,11 @@
+[db]
+cent1
+
+[webserver]
+rh12
+
+[lb]
+cent2
+
+[production:children]
+webserver

@@ -1,0 +1,8 @@
+---
+- hosts: webserver
+  become: true
+  tasks:
+    - name: arc
+      archive: path=/root/hello.txt dest=/root/{{inventory_hostname}}.tar.bz2 format=bz2
+    - name: fetch file 
+      fetch: src="/root/{{inventory_hostname}}.tar.bz2" dest=/root/{{inventory_hostname}}-fecthed.tar.bz2 flat=true
