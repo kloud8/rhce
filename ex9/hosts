@@ -7,7 +7,7 @@ cent1
 [test]
 cent2
 
-[balancers]
+[lb]
 rh22
 
 [webservers:children]

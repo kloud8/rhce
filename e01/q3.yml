@@ -1,0 +1,13 @@
+---
+- hosts: devops
+  become: true
+  tasks:
+   - name: file dir
+     file: path=/tmp/backup owner=chris group=chris state=directory mode=0755
+     delegate_to: 127.0.0.1
+   - name: file dirs
+     file: path=/tmp/backup owner=chris group=chris state=directory mode=0755
+   - name: zip
+     archive: path=/etc dest=/tmp/backup/config.gz format=gz owner=chris group=chris mode=0660
+   - name: fetch
+     fetch: src=/tmp/backup/config.gz dest=/tmp/backup/{{ansible_hostname}}-config.gz 

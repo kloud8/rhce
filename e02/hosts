@@ -1,5 +1,8 @@
-[prod]
+[pro]
 rh21
+
+[lb]
+rh22
 
 [dev]
 cent1
@@ -7,8 +10,6 @@ cent1
 [test]
 cent2
 
-[balancers]
-rh22
-
 [webservers:children]
-prod
+pro
+lb

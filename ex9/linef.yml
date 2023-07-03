@@ -1,0 +1,16 @@
+---
+- hosts: test
+  tasks:
+    - name: lineinfile
+      lineinfile: path=/root/hwreport.txt regexp="{{item.name}}" line="{{item.name}} = {{item.value}}"
+      loop:
+        - name: inventory_name
+          value: "{{ansible_hostname}}"
+        - name: total_mem
+          value: "{{ansible_memtotal_mb}}"
+        - name: bios_version
+          value:  "{{ansible_bios_version}}"
+        - name: sda_size
+          value: "{{ansible_devices.sda.size | default('NONE')}}"
+        - name: vdb_size
+          vlaue: "{{ ansible_devices.vdb.size | default('NONE') }}"

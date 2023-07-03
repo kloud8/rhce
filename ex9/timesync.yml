@@ -1,0 +1,8 @@
+---
+- hosts: dev
+  vars:
+    timesync_ntp_servers:
+      - hostname: 2.pool.ntp.org
+  roles:
+    - rhel-system-roles.timesync
+

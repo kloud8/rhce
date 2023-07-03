@@ -8,3 +8,16 @@
         iburst: yes
   roles:
     - rhel-system-roles.timesync
+
+
+
+---
+- hosts: all
+  become: true
+  vars:
+    timesync_ntp_servers:
+      - hostname: 2.pool.ntp.org
+        pool: yes
+        iburst: yes
+  roles:
+    - rhel-system-roles.timesync

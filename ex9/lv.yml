@@ -1,0 +1,54 @@
+# ----
+# - hosts: lb
+#   tasks:
+#      - name: check vg
+#        shell: vgdisplay research
+#        register: check_vg
+#        ignore_errors: true
+#      - name: debug
+#        debug: msg="vg research does not exist!"
+#        when: check_vg is failed
+#      - name: create vg
+#        block:
+#          - name: create vg
+#            lvg: vg=research pvs=/dev/sda
+#          - name: lv
+#            lvol: vg=research lv=lvx size=1500M
+#        rescue:
+#          - debug: msg="can not create lv of that size"
+#          - name: vg2
+#            lvol: vg=research lv=lvx size=8000M
+#      - name: format
+#        filesystem: dev=/dev/research/lvx fstype=ext4
+#      - name: mt point
+#        file: path=/data state=directory mode="0755" 
+#      - name: mount
+#        mount: src=/dev/research/lvx path=/data fstype=ext4 state=mounted
+
+---
+- hosts: lb
+  become: true
+  tasks:
+    - name: check
+      shell: vgdisplay research
+      register: check_vg
+      ignore_errors: true
+    - debug: msg="research doesnt exist"
+      when: check_vg is failed
+    - name: block
+      block:
+        - name: lvg
+          lvg: vg=demo pvs=/dev/sda
+        - name: create lv
+          lvol: vg=demo lv=lvx size=2500M
+      rescue:
+        - name: "erroer message"
+          debug: msg="no size!!"
+        - name: "create 800M"
+          lvol: vg="demo" lv="lvx" size=800M
+    - name: format
+      filesystem: dev="/dev/demo/lvx" fstype=ext4
+    - name: mount point
+      file: path=/data state=directory mode="0755" 
+    - name: mount
+      mount: src=/dev/demo/lvx path=/data fstype=ext4 state=mounted 

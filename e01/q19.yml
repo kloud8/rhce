@@ -1,0 +1,17 @@
+---
+- hosts: lb
+  become: true
+  vars:
+    timesync_ntp_servers:
+      - hostname: 1.p1.pool.ntp.org 
+        iburst: true
+        pool: true
+      - hostname: 2.p1.pool.ntp.org
+        iburst: true
+        pool: true
+  roles:
+    - rhel-system-roles.timesync
+  post_tasks:
+    - name: timezone
+      timezone: name="UTC"
+

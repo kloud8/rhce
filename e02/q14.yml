@@ -1,0 +1,20 @@
+---
+- hosts: all
+  vars_files:
+    - locker.yml
+    - list.yml
+  tasks: 
+    - name: group
+      group: name=devops state=present
+      when: ansible_hostname in groups['dev'] or ansible_hostname in groups['test']
+    - name: group2
+      group: name=opsmgr state=present
+      when: ansible_hostname in groups['lb']
+    - name: add user
+      user: name="{{item.name}}" state=present group=devops append=true password="{{pw_developer | password_hash('sha512')}}"
+      loop: "{{users}}"
+      when: (ansible_hostname in groups['dev'] or ansible_hostname in groups['test']) and item.job == "developers"
+    - name: add users2
+      user: name="{{item.name}}" state=present group=opsmgr append=true password="{{pw_manager | password_hash('sha512')}}"
+      loop: "{{users}}"
+      when: ansible_hostname in groups['lb'] and item.job =="manager"

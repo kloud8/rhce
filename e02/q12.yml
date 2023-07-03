@@ -1,0 +1,16 @@
+---
+- hosts: test
+  tasks:
+   - name: line
+     lineinfile: path=/root/report.txt regexp={{item.name}} line="{{item.name}} = {{item.value}}"
+     loop:
+      - name: inventory_name
+        value: "{{ansible_hostname}}"
+      - name: total_mem
+        value: "{{ansible_memtotal_mb}}"
+      - name: bios_version
+        value: "{{ansible_bios_version}}"
+      - name: sda_size
+        value: "{{ansible_devices.sda.size | default('NONE')}}"
+      - name: vds_size
+        value: "{{ansible_devices.vds.size | default('NONE')}}"

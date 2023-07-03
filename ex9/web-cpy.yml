@@ -1,5 +1,5 @@
 ---
-- hosts: dev
+- hosts: lb
   become: true 
   tasks:
     - name: install
@@ -23,7 +23,6 @@
       sefcontext: target='/webdev(/.*)?' setype="httpd_sys_content_t" state=present 
     - name: apply 
       command: restorecon -irv /webdev
-      notify: restart                            #check!
     
     - name: restart
       service: name=httpd state=restarted enabled=true

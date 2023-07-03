@@ -1,0 +1,17 @@
+---
+- hosts: test
+  become: true
+  vars:
+    config_path: /etc/ssh/sshd_config
+  tasks:
+   - name: line1
+     lineinfile: path="{{config_path}}" regexp='^X11Forwarding.*' line="X11Forwarding no" 
+     notify: restart sshd
+   - name: line2
+     lineinfile: path="{{config_path}}" regexp='^MaxAuthTries.*' line="MaxAuthTries 3" 
+     notify: restart sshd
+
+
+  handlers:
+   - name: restart sshd
+     service: name=sshd state=restarted

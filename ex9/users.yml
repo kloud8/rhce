@@ -1,0 +1,25 @@
+---
+- hosts: all
+  vars_files:
+    - locker.yml
+    - list.yml
+  tasks:
+    - name: groups
+      group: name=devops state=present
+      when: inventory_hostname in groups['dev'] or inventory_hostname in groups['test']
+    - name: groups 2
+      group: name=osmgr state=present
+      when: inventory_hostname in groups['prod']
+    - name: users
+      user: name="{{itm.name}}" groups=devops state=present append=true password="{{ pw_developer | password_hash('sha512') }}"
+      loop:
+        - "{{ users }}"
+      when: ( inventory_hostname in groups['dev'] or inventory_hostname in groups['test']) and item.job == "developers"
+    - name: manager
+      user: name="{{item.name}}" groups=osmgr state=present append=true password="{{ pw_manager | password_hash('sha512') }}"
+      loop:
+        - "{{users}}"
+      # when: inventory_hostname in groups['prod'] and item.job == "manager"
+      when: 
+        - item.job =="manager"
+        - inventory_hostname in groups.prod

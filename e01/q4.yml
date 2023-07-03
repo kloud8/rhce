@@ -1,0 +1,10 @@
+---
+- hosts: all
+  become: true
+  tasks:
+   - name: motd
+     copy: content="welcome webservers" dest=/etc/motd
+     when: inventory_hostname in groups['webservers']
+   - name: motd2
+     copy: content="welcome dev" dest=/etc/motd
+     when: inventory_hostname in groups['dev']

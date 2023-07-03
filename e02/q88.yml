@@ -1,0 +1,28 @@
+---
+- hosts: lb
+  become: true
+  tasks:
+    - name: check
+      shell: vgdisplay research
+      register: check_vg
+      ignore_errors: true
+    - debug: msg="research doesnt exist"
+      when: check_vg is failed
+    - name: block
+      block:
+        - name: lvg
+          lvg: vg=research pvs=/dev/nvme0n2
+        - name: create lv
+          lvol: vg=research lv=lvx size=2500M
+      rescue:
+        - name: "erroer message"
+          debug: msg="no size!!"
+        - name: "create 800M"
+          lvol: vg="research" lv="lvx" size=800M
+      always:
+        - name: filesystem
+          filesystem: dev="/dev/research/lvx" fstype=ext4 
+        - name: dir
+          file: path=/data state=directory mode="0755"
+        - name: fstab
+          mount: src="/dev/research/lvx" path=/data fstype=ext4 state=mounted

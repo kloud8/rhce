@@ -1,0 +1,6 @@
+---
+- hosts: all
+  tasks:
+   - name: tem
+     template: src=hosts.j2 dest=/tmp/hosts
+     when: ansible_hostname in groups['dev']

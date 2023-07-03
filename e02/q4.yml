@@ -1,0 +1,10 @@
+- hosts: dev, test
+  vars:
+    timesync_ntp_servers:
+      - hostname: 0.pool.ntp.org
+        iburst: true
+      - hostname: 1.pool.ntp.org
+        iburst: true
+  roles:
+    - rhel-system-roles.timesync
+

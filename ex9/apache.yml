@@ -1,0 +1,23 @@
+---
+- hosts: dev
+  tasks:
+   - name: install package
+     yum: name="{{item}}" state=present
+     loop:
+      - httpd
+      - firewalld
+   - name: sevice
+     service: name="{{item}}" state=started enabled=true
+     loop:
+       - httpd
+       - firewalld
+   - name: open port
+     firewalld: service=http state=enabled permanent=true immediate=true
+   - name: template
+     template: src=index.html.j2 dest=/var/www/html/index.html setype=httpd_sys_content_t
+     notify: restart httpd
+
+
+  handlers:
+   - name: restart httpd
+     service: name=httpd state=restarted

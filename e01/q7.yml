@@ -1,0 +1,11 @@
+---
+- hosts: all
+  become: true
+  vars:
+    ram_mb: 3800
+  tasks:
+     - name: check
+       debug: msg="insufficient ram!"
+       when: ansible_memtotal_mb < ram_mb
+     - name: sysctl
+       sysctl: name="vm.swappiness" value="10" sysctl_set=true reload=true

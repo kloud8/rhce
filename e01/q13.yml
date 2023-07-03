@@ -1,0 +1,16 @@
+---
+- hosts: dev
+  become: true
+  tasks:
+   - name: install
+     yum: name=lvm2 state=present
+   - name: partition
+     parted: device="/dev/sdb" label=gpt number=1 state=present part_start=0% part_end=1100MB
+   - name:  p1
+     lvg: pvs="/dev/sdb1" vg=vgm 
+   - name: p2
+     lvol: lv=lvm size="100%FREE" vg=vgm
+   - name: file
+     filesystem: dev="/dev/vgm/lvm" fstype=swap
+   - name: lin
+     lineinfile: path="/etc/fstab" line="/dev/vgm/lvm   swap   swap defaults 0 0"

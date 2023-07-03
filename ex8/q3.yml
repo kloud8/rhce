@@ -1,16 +1,16 @@
 ---
-- hosts: dev, test, prod
+- hosts: test
   tasks:
-   - name: install
-     yum: name="{{item}}" state=present
-     loop:
-       - php
-       - mariadb
+  #  - name: install
+  #    yum: name="{{item}}" state=present
+  #    loop:
+  #      - php
+  #      - mariadb
    - name: pkg dev
      yum: name="@RPM Development tools" state=present
-     when: ansible_hostname in groups['dev']
-   - name: update
-     yum: name="*" state=latest
-     when: ansible_hostname in groups['dev']
+  #    when: ansible_hostname in groups['dev']
+  #  - name: update
+  #    yum: name="*" state=latest
+  #    when: ansible_hostname in groups['dev']
 
 
